@@ -1,5 +1,6 @@
 package com.example.assignment9;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -7,7 +8,9 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
     boolean defCamera;
@@ -59,11 +63,56 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+    private void startCameraX() {
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    cameraProvider = cameraProviderFuture.get();
+                    bindPreview(cameraProvider);
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, ContextCompat.getMainExecutor(this));
+
+
+    }
+
+    void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
+
+        cameraProvider.unbindAll();
+
+
+        //Selector Use case
+        if (defCamera) {
+            cameraSelector = new CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build();
+
+        } else {
+            cameraSelector = new CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                    .build();
+        }
     private void capturePhoto() {
-        SimpleDateFormat mDateFormat = new SimpleDateFromat("yyyyMMddHHmmss", Locale.US);
+        SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
         File file = new File(getExternalFilesDir("asd"), mDateFormat.format(new Date())+ ".jpg");
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
 
+    }
+    private boolean allPermissionsGranted(){
+        //check if req permissions have been granted
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
