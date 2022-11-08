@@ -14,6 +14,11 @@ import android.widget.Button;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
     boolean defCamera;
     PreviewView previewView;
@@ -54,6 +59,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+    private void capturePhoto() {
+        SimpleDateFormat mDateFormat = new SimpleDateFromat("yyyyMMddHHmmss", Locale.US);
+        File file = new File(getExternalFilesDir("asd"), mDateFormat.format(new Date())+ ".jpg");
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
 
-    
+    }
+
 }
