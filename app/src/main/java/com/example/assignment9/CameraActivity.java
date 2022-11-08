@@ -9,11 +9,12 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
     boolean defCamera;
     PreviewView previewView;
     Preview preview;
@@ -44,4 +45,15 @@ public class CameraActivity extends AppCompatActivity {
                     REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.camera_btn:
+                capturePhoto();
+                break;
+        }
+    }
+
+    
 }
