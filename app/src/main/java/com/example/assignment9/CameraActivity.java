@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -37,6 +38,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE"};
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageCapture imageCapture;
+    StorageReference storageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,15 +125,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         Uri picUri = outputFileResults.getSavedUri();
                         if (picUri == null){
                             Toast.makeText(CameraActivity.this, "Uri is Empty, Image might be saved", Toast.LENGTH_SHORT).show();
-                        }else
+                        }else{
 //                            Glide.with(getBaseContext())
 //                                    .load(picUri)
 //                                    .into(imageHolder);
+                        uploadImage();
 
 
                             Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
 
-                    }
+                    }}
 
 
                     @Override
@@ -146,6 +149,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     }
                 });
+
+    }
+    private void uploadImage() {
 
     }
 }
