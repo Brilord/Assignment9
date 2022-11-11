@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -39,6 +40,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageCapture imageCapture;
     StorageReference storageRef;
+    FirebaseStorage storage;
+    StorageReference mountainsRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +55,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         capture.setOnClickListener(this);
         switchCamera.setOnClickListener(this);
 
-        //if (allPermissionsGranted()) {
+        if (allPermissionsGranted()) {
             startCameraX();
-        //} else {
-            //ActivityCompat.requestPermissions(this,
-                    //REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
-        //}
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        }
     }
 
     @Override
@@ -108,6 +111,17 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                     .build();
         }
+        //Preview Use case
+        preview = new Preview.Builder().build();
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+        //ImageCapture use case
+        imageCapture = new ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
+                .build();
+        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+
     }
     private void capturePhoto() {
         SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
@@ -121,20 +135,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-
                         Uri picUri = outputFileResults.getSavedUri();
                         if (picUri == null){
                             Toast.makeText(CameraActivity.this, "Uri is Empty, Image might be saved", Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
 //                            Glide.with(getBaseContext())
 //                                    .load(picUri)
 //                                    .into(imageHolder);
-                        uploadImage();
+//
+                        mountainsRef.child(mDateFormat.format(new Date())).putFile(picUri);
+                        Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
+                            // Create a storage reference from our app
 
 
-                            Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
 
-                    }}
+                        }
+                    }
 
 
                     @Override
@@ -151,7 +167,26 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
     }
-    private void uploadImage() {
-
+    private boolean allPermissionsGranted(){
+        //check if req permissions have been granted
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //start camera when permissions have been granted otherwise exit app
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                startCameraX();
+            } else {
+                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 }
