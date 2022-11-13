@@ -1,6 +1,9 @@
 package com.example.assignment9;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,14 +13,21 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * You will be making an app for a selfie a day. The idea is quite simple: When the app loads up, it should
@@ -46,17 +56,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     FirebaseFirestore fStore;
     SensorManager sensorManager;
     private long lastUpdate;
+    RecyclerView recyclerView;
+    PhotosAdopter photosAdopter;
+    List<Photo> list =new ArrayList<>();
+    Photo listdata = new Photo();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView = findViewById(R.id.recyclerView);
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         firebaseDatabase=FirebaseDatabase.getInstance();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lastUpdate = System.currentTimeMillis();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        photosAdopter = new PhotosAdopter(list, MainActivity.this);
+        recyclerView.setAdapter(photosAdopter);
 
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d("MYDATA", "Outside the for " );
+//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
+//                {
+//                    Log.d("MYDATA", "Inside the for");
+//                    listdata=dataSnapshot1.getValue(Photo.class);
+//                    photosAdopter.noteList.add(listdata);
+//                    //Log.d("MYDATA", "Inside the for " + listdata.title + " " + listdata.content);
+//                }
+//                photosAdopter.notifyDataSetChanged();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
     }
     @Override
     public void onSensorChanged(SensorEvent event) {

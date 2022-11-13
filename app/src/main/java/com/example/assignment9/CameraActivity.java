@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -55,6 +56,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         capture.setOnClickListener(this);
         switchCamera.setOnClickListener(this);
 
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        mountainsRef = storageRef.child("Images");
         if (allPermissionsGranted()) {
             startCameraX();
         } else {
@@ -105,7 +109,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             cameraSelector = new CameraSelector.Builder()
                     .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                     .build();
-
         } else {
             cameraSelector = new CameraSelector.Builder()
                     .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
@@ -145,10 +148,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 //
                         mountainsRef.child(mDateFormat.format(new Date())).putFile(picUri);
                         Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
-                            // Create a storage reference from our app
-
-
-
                         }
                     }
 
