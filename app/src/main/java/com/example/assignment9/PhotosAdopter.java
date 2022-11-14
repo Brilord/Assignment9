@@ -15,6 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder>{
@@ -68,8 +72,17 @@ public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get element from your dataset at this position and replace the contents of the View with that element
         //holder.rowImage.setImageResource(images[position]);
+        StorageReference storageRef;
+        FirebaseStorage storage;
+        StorageReference mountainsRef;
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        mountainsRef = storageRef.child("Images");
+        Glide.with(context).load(mountainsRef).into(holder.rowImage);
 
     }
+
+
 
     // Return the size of your dataset
     @Override
