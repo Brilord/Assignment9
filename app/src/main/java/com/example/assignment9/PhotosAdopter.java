@@ -68,7 +68,7 @@ public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get element from your dataset at this position and replace the contents of the View with that element
         //holder.rowImage.setImageResource(images[position]);
-        Photo photo =
+
     }
 
     // Return the size of your dataset
