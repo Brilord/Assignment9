@@ -161,7 +161,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                                 Toast.makeText(CameraActivity.this, "Image Capture error", Toast.LENGTH_SHORT).show();
                             }
                         });
-
                     }
                 });
 
@@ -177,7 +176,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //start camera when permissions have been granted otherwise exit app
+        // start camera when permissions have been granted otherwise exit app
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {

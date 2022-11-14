@@ -73,26 +73,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lastUpdate = System.currentTimeMillis();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        photosAdopter = new PhotosAdopter(list, MainActivity.this);
+        photosAdopter = new PhotosAdopter(this, list);
         recyclerView.setAdapter(photosAdopter);
 
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d("MYDATA", "Outside the for " );
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-//                {
-//                    Log.d("MYDATA", "Inside the for");
-//                    listdata=dataSnapshot1.getValue(Photo.class);
-//                    photosAdopter.noteList.add(listdata);
-//                    //Log.d("MYDATA", "Inside the for " + listdata.title + " " + listdata.content);
-//                }
-//                photosAdopter.notifyDataSetChanged();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
+
     }
     @Override
     public void onSensorChanged(SensorEvent event) {

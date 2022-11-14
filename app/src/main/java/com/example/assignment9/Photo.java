@@ -1,18 +1,19 @@
 package com.example.assignment9;
 
 public class Photo {
-    public String photoURL;
+    public int photoURL;
+
     public Photo() {}
 
-    public Photo(String photoURL) {
+    public Photo(int photoURL) {
         this.photoURL = photoURL;
     }
 
-    public String getPhotoURL() {
+    public int getPhotoURL() {
         return photoURL;
     }
 
-    public void setPhotoURL(String photoURL) {
+    public void setPhotoURL(int photoURL) {
         this.photoURL = photoURL;
     }
 }
