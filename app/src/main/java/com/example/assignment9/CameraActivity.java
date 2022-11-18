@@ -17,6 +17,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +31,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -178,11 +181,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         Uri picUri = outputFileResults.getSavedUri();
                         if (picUri == null) {
                             Toast.makeText(CameraActivity.this, "Uri is Empty, Image might be saved", Toast.LENGTH_SHORT).show();
-                        } else
+                        } else {
                             mountainsRef.child(mDateFormat.format(new Date())).putFile(picUri);
+                            addURI();
 
-                        Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CameraActivity.this, "Image saved at " + picUri.getPath() + " Uri is not Empty, saved", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
 
 
                     @Override
@@ -237,5 +243,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-
+    public void addURI() {
+//        id=databaseReference.push().getKey();
+//        Note listdata = new Note(id, titlesend, descsend);
+//        databaseReference.child("Notes").child(id).setValue(listdata).
+//                addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        Toast.makeText(AddNoteActivity.this, "Notes Added", Toast.LENGTH_SHORT).show();
+//                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                    }
+//                });
+    }
 }

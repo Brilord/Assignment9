@@ -25,9 +25,7 @@ public class ImageActivity extends AppCompatActivity {
         StorageReference mountainRef;
 
         storage = FirebaseStorage.getInstance();
-
-        storageRef = storage.getReference();
-        //mountainRef = storageRef.child("Image").child();
-        //Glide.with(this).load(mountainRef).into(imageView2);
+        mountainRef = storage.getReference().child("Images/").child("20221114150402");
+        Glide.with(this).load(mountainRef).into(imageView2);
     }
 }

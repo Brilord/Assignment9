@@ -24,7 +24,9 @@ import java.util.List;
 public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder>{
     // Declare variables to store data from the constructor
     Context context;
-
+    StorageReference storageRef;
+    FirebaseStorage storage;
+    StorageReference mountainsRef;
     //int[] images;
     List<Photo> images;
     // Create a static inner class and provide references to all the Views for each data item.
@@ -58,8 +60,7 @@ public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TextView rowName = v.findViewById(R.id.textView1);
-                //Toast.makeText(context, "Clicked Item: " + rowName.getText().toString(), Toast.LENGTH_SHORT).show();
+
             }
         });
         // Return a new holder instance
@@ -72,16 +73,33 @@ public class PhotosAdopter extends RecyclerView.Adapter<PhotosAdopter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get element from your dataset at this position and replace the contents of the View with that element
         //holder.rowImage.setImageResource(images[position]);
-        StorageReference storageRef;
-        FirebaseStorage storage;
-        StorageReference mountainsRef;
         storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-        mountainsRef = storageRef.child("Images");
-        Glide.with(context).load(mountainsRef).into(holder.rowImage);
+
+
+
 
     }
 
+
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        public ViewHolder(@NonNull View itemView) {
+//            super(itemView);
+////            title=itemView.findViewById(R.id.title);
+////            content=itemView.findViewById(R.id.content);
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //Bundle bundle = new Bundle();
+//
+////                    Bundle bundle = new Bundle();
+////                    Intent i = new Intent(context, ImageActivity.class);
+//////                    bundle.putString("id",listdata.id);
+//////                    bundle.putString("title",listdata.title);
+//////                    bundle.putString("content",listdata.content);
+//////                    i.putExtras(bundle);
+////                    context.startActivity(i);
+//                }
+//            });
 
 
     // Return the size of your dataset

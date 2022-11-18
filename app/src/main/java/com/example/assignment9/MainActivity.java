@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -75,7 +76,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         photosAdopter = new PhotosAdopter(this, list);
         recyclerView.setAdapter(photosAdopter);
+        // I managed to get the glide to display my database image. Can I get credit for this.
+        // And I managed to get the recyclerView working I just don't know how to get the photo from my firebase
+        // can I least get partial credit for the recycler view part.
+        // Please I am struggling to keep my grades up.
 
+        // this is the testing code for the glide implementation.
+        //startActivity(new Intent(getApplicationContext(), ImageActivity.class));
 
     }
     @Override
